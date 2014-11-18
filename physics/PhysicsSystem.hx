@@ -101,7 +101,8 @@ class PhysicsSystem
         
         _cachedContacts = new Array<ContactData>();
         
-        setGravity(JNumber3D.getScaleVector(Vector3D.Y_AXIS, -10));
+        //setGravity(JNumber3D.getScaleVector(Vector3D.Y_AXIS, -10));
+        setGravity(new Vector3D(0, 0, -10));
     }
     
     public function setCollisionSystem(collisionSystemGrid : Bool = false, sx : Float = 0, sy : Float = 0, sz : Float = 0, nx : Int = 20, ny : Int = 20, nz : Int = 20, dx : Int = 200, dy : Int = 200, dz : Int = 200) : Void{
@@ -989,13 +990,23 @@ class PhysicsSystem
             //_cachedContacts.fixed = true;
             for (i in 0...collInfo_pointInfo.length) collInfo_pointInfo.push(null);
             
-            for (ptInfo in collInfo_pointInfo)
-            {
-                id1 = -1;
-                if (body1 != null)                     id1 = body1.id;
-                fricImpulse = ((body0.id > id1)) ? ptInfo.accumulatedFrictionImpulse : JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
+            for (ptInfo in collInfo_pointInfo) {
                 
-                _cachedContacts[Std.int(i++)] = contact = new ContactData();
+                if (ptInfo == null) return; // TODO: ptInfo null and crashes
+
+                id1 = -1;
+                if (body1 != null) id1 = body1.id;
+
+                if (body0.id > id1) {
+                    fricImpulse = ptInfo.accumulatedFrictionImpulse;
+                }
+                else {
+                    fricImpulse = JNumber3D.getScaleVector(ptInfo.accumulatedFrictionImpulse, -1);
+                }
+
+                contact = new ContactData();
+                //_cachedContacts[i++] = contact;
+                _cachedContacts.push(contact);
                 contact.pair = new BodyPair(body0, body1, ptInfo.r0, ptInfo.r1);
                 contact.impulse = new CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
             }
@@ -1192,7 +1203,7 @@ class PhysicsSystem
     private function findAllActiveBodiesAndCopyStates() : Void
     {
         _activeBodies = new Array<RigidBody>();
-        var i : Int = 0;
+        //var i : Int = 0;
         
         for (body in _bodies)
         {
@@ -1200,16 +1211,15 @@ class PhysicsSystem
             if (body.isActive) 
             {
                 //_activeBodies[Std.int(i++)] = body;
+                //i++;
                 _activeBodies.push(body);
                 body.copyCurrentStateToOld();
             }
         }  // correct length  
         
-        
-        
         //_activeBodies.fixed = false;
         //_activeBodies.length = i;
-        while (_activeBodies.length > i) _activeBodies.pop();
+        //while (_activeBodies.length > i) _activeBodies.pop();
         
         // fixed is faster
         //_activeBodies.fixed = true;
