@@ -6,6 +6,7 @@ import jiglib.data.CollOutData;
 import jiglib.math.*;
 import jiglib.physics.PhysicsState;
 import jiglib.physics.RigidBody;
+import jiglib.plugin.ISkin3D;
 
 class JPlane extends RigidBody
 {
@@ -16,9 +17,9 @@ class JPlane extends RigidBody
     private var _normal : Vector3D;
     private var _distance : Float;
     
-    public function new(initNormal : Vector3D = null)
+    public function new(skin : ISkin3D, initNormal : Vector3D = null)
     {
-        super();
+        super(skin);
         
         _initNormal = (initNormal != null) ? initNormal.clone() : new Vector3D(0, 0, -1);
         _normal = _initNormal.clone();

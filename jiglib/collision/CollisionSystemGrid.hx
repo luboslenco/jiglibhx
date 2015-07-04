@@ -10,6 +10,18 @@ import jiglib.math.JNumber3D;
 import jiglib.math.Vector3D;
 import jiglib.physics.RigidBody;
 
+private class GridData
+{
+    public var i:Int;
+    public var j:Int;
+    public var k:Int;
+    public var fi:Float;
+    public var fj:Float;
+    public var fk:Float;
+
+    public function new() { }
+}
+
 class CollisionSystemGrid extends CollisionSystemAbstract
 {
     private var gridEntries : Array<CollisionSystemGridEntry>;
@@ -103,9 +115,9 @@ class CollisionSystemGrid extends CollisionSystemAbstract
     }
     
     
-    public function calcGridForSkin6(colBody : RigidBody) : Dynamic
+    public function calcGridForSkin6(colBody : RigidBody) : GridData
     {
-        var tempStoreObject : Dynamic = null;// = Dynamic();
+        var tempStoreObject : GridData = new GridData();
         var i : Int;var j : Int;var k : Int;
         var fi : Float;var fj : Float;var fk : Float;
         
@@ -138,19 +150,19 @@ class CollisionSystemGrid extends CollisionSystemAbstract
         }
         else if (i >= Std.int(nx)) {i = 0;fi = 0.0;
         }
-        else fi -= i;//Std.parseFloat(i);
+        else fi -= i;
         
         if (j < 0) {j = 0;fj = 0.0;
         }
         else if (j >= Std.int(ny)) {j = 0;fj = 0.0;
         }
-        else fj -= j;//Std.parseFloat(j);
+        else fj -= j;
         
         if (k < 0) {k = 0;fk = 0.0;
         }
         else if (k >= Std.int(nz)) {k = 0;fk = 0.0;
         }
-        else fk -= k;//Std.parseFloat(k);
+        else fk -= k;
         
         tempStoreObject.i = i;tempStoreObject.j = j;tempStoreObject.k = k;tempStoreObject.fi = fi;tempStoreObject.fj = fj;tempStoreObject.fk = fk;
         //trace(i,j,k,fi,fj,fk);
@@ -261,7 +273,7 @@ class CollisionSystemGrid extends CollisionSystemAbstract
         var fi : Float;
         var fj : Float;
         var fk : Float;
-        var tempStoreObject : Dynamic = calcGridForSkin6(colBody);
+        var tempStoreObject : GridData = calcGridForSkin6(colBody);
         i = tempStoreObject.i;j = tempStoreObject.j;k = tempStoreObject.k;fi = tempStoreObject.fi;fj = tempStoreObject.fj;fk = tempStoreObject.fk;
         
         if (i == -1) 

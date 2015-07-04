@@ -16,9 +16,9 @@ class JTriangleMesh extends RigidBody
     private var _minCellSize : Float;
     private var _skinVertices : Array<Vector3D>;
     
-    public function new(initPosition : Vector3D, initOrientation : Matrix3D, maxTrianglesPerCell : Int = 10, minCellSize : Float = 10)
+    public function new(skin : ISkin3D, initPosition : Vector3D, initOrientation : Matrix3D, maxTrianglesPerCell : Int = 10, minCellSize : Float = 10)
     {
-        super();
+        super(skin);
         
         currentState.position = initPosition.clone();
         currentState.orientation = initOrientation.clone();
@@ -27,13 +27,13 @@ class JTriangleMesh extends RigidBody
         
         this.movable = false;
         
-        /*if (skin != null) {
+        if (skin != null) {
             _skinVertices = skin.vertices;
             createMesh(_skinVertices, skin.indices);
             
             _boundingBox = _octree.boundingBox().clone();
             skin.transform = JMatrix3D.getAppendMatrix3D(currentState.orientation, JMatrix3D.getTranslationMatrix(currentState.position.x, currentState.position.y, currentState.position.z));
-        }*/
+        }
         
         _type = "TRIANGLEMESH";
     }

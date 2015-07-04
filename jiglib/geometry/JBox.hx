@@ -8,7 +8,7 @@ import jiglib.data.SpanData;
 import jiglib.math.*;
 import jiglib.physics.PhysicsState;
 import jiglib.physics.RigidBody;
-//import jiglib.plugin.ISkin3D;
+import jiglib.plugin.ISkin3D;
 
 class JBox extends RigidBody
 {
@@ -28,9 +28,9 @@ class JBox extends RigidBody
                 [3, 1, 7, 5], [4, 6, 0, 2], 
                 [1, 3, 2, 0], [7, 6, 4, 5]];
     
-    public function new(width : Float, depth : Float, height : Float)
+    public function new(skin:ISkin3D, width : Float, depth : Float, height : Float)
     {
-        super();
+        super(skin);
         _type = "BOX";
         
         _sideLengths = new Vector3D(width, height, depth);

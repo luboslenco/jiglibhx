@@ -101,8 +101,7 @@ class PhysicsSystem
         
         _cachedContacts = new Array<ContactData>();
         
-        //setGravity(JNumber3D.getScaleVector(Vector3D.Y_AXIS, -10));
-        setGravity(new Vector3D(0, 0, -10));
+        setGravity(JNumber3D.getScaleVector(Vector3D.Y_AXIS, -10));
     }
     
     public function setCollisionSystem(collisionSystemGrid : Bool = false, sx : Float = 0, sy : Float = 0, sz : Float = 0, nx : Int = 20, ny : Int = 20, nz : Int = 20, dx : Int = 200, dy : Int = 200, dz : Int = 200) : Void{

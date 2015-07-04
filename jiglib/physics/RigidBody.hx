@@ -13,7 +13,7 @@ import jiglib.geometry.JSegment;
 import jiglib.math.*;
 import jiglib.events.JCollisionEvent;
 import jiglib.physics.constraint.JConstraint;
-//import jiglib.plugin.ISkin3D;
+import jiglib.plugin.ISkin3D;
 
 class RigidBody //extends EventDispatcher
 {
@@ -29,7 +29,7 @@ class RigidBody //extends EventDispatcher
     public var oldState(get, never) : PhysicsState;
     public var id(get, never) : Int;
     public var type(get, never) : String;
-    //public var skin(get, never) : ISkin3D;
+    public var skin(get, never) : ISkin3D;
     public var boundingSphere(get, never) : Float;
     public var boundingBox(get, never) : JAABox;
     public var force(get, never) : Vector3D;
@@ -49,7 +49,7 @@ class RigidBody //extends EventDispatcher
     private static var idCounter : Int = 0;
     
     private var _id : Int;
-    //private var _skin : ISkin3D;
+    private var _skin : ISkin3D;
     
     private var _type : String;
     private var _boundingSphere : Float;
@@ -110,14 +110,14 @@ class RigidBody //extends EventDispatcher
     public var externalData : CollisionSystemGridEntry;  // used when collision system is grid  
     public var collisionSystem : CollisionSystemAbstract;
     
-    public function new(/*skin : ISkin3D*/)
+    public function new(skin : ISkin3D)
     {
         //super();
         _useDegrees = ((JConfig.rotationType == "DEGREES")) ? true : false;
         
         _id = idCounter++;
         
-        //_skin = skin;
+        _skin = skin;
         _material = new MaterialProperties();
         
         _bodyInertia = new Matrix3D();
@@ -326,7 +326,7 @@ class RigidBody //extends EventDispatcher
         _currState.rotVelocity.setTo(0, 0, 0);
         copyCurrentStateToOld();
         updateBoundingBox();  // todo: is making invalid boundingboxes, shouldn't this only be update when it's scaled?  
-        //updateObject3D();
+        updateObject3D();
         
         if (collisionSystem != null) {
             collisionSystem.collisionSkinMoved(this);
@@ -611,7 +611,7 @@ class RigidBody //extends EventDispatcher
         
         updatePositionWithAux(dt);
         updateBoundingBox();  // todo: is making invalid boundingboxes, shouldn't this only be update when it's scaled?  
-        //updateObject3D();
+        updateObject3D();
         
         if (collisionSystem != null) {
             collisionSystem.collisionSkinMoved(this);
@@ -941,10 +941,10 @@ class RigidBody //extends EventDispatcher
         return _type;
     }
     
-    //private function get_skin() : ISkin3D
-    //{
-    //    return _skin;
-    //}
+    private function get_skin() : ISkin3D
+    {
+        return _skin;
+    }
     
     private function get_boundingSphere() : Float
     {
@@ -1066,18 +1066,17 @@ class RigidBody //extends EventDispatcher
     
     public function getTransform() : Matrix3D
     {
-        //return (_skin != null) ? _skin.transform : null;
-        return null;
+        return (_skin != null) ? _skin.transform : null;
     }
     
     //update skin
-    //private function updateObject3D() : Void
-    //{
-    //    if (_skin != null) 
-    //    {
-    //        _skin.transform = JMatrix3D.getAppendMatrix3D(_currState.orientation, JMatrix3D.getTranslationMatrix(_currState.position.x, _currState.position.y, _currState.position.z));
-    //    }
-    //}
+    private function updateObject3D() : Void
+    {
+        if (_skin != null)
+        {
+            _skin.transform = JMatrix3D.getAppendMatrix3D(_currState.orientation, JMatrix3D.getTranslationMatrix(_currState.position.x, _currState.position.y, _currState.position.z));
+        }
+    }
     
     private function get_material() : MaterialProperties
     {

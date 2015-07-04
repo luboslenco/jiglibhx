@@ -14,9 +14,9 @@ class JSphere extends RigidBody
     public var name : String;
     private var _radius : Float;
     
-    public function new(r : Float)
+    public function new(skin : ISkin3D, r : Float)
     {
-        super();
+        super(skin);
         _type = "SPHERE";
         _radius = r;
         _boundingSphere = _radius;

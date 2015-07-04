@@ -6,6 +6,7 @@ import jiglib.data.CollOutData;
 import jiglib.math.*;
 import jiglib.physics.PhysicsState;
 import jiglib.physics.RigidBody;
+import jiglib.plugin.ISkin3D;
 
 class JCapsule extends RigidBody
 {
@@ -16,9 +17,9 @@ class JCapsule extends RigidBody
     private var _length : Float;  //cylinder height  
     private var _radius : Float;  //radius of sphere  
     
-    public function new(r : Float, l : Float)
+    public function new(skin : ISkin3D, r : Float, l : Float)
     {
-        super();
+        super(skin);
         _type = "CAPSULE";
         _radius = r;
         _length = l;

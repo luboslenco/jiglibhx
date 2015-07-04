@@ -5,14 +5,12 @@ import jiglib.geometry.JSegment;
 import jiglib.math.JNumber3D;
 import jiglib.math.JMath3D;
 import jiglib.math.Vector3D;
-import jiglib.util.Dictionary;
 import jiglib.physics.RigidBody;
 
 class CollisionSystemAbstract
 {
     public var numCollisionsChecks(get, never) : Int;
 
-    //public var detectionFunctors : Dictionary;
     public var detectionFunctors : Map<String, Dynamic>;
     public var collBody : Array<RigidBody>;
     public var _numCollisionsChecks : Int = 0;
@@ -22,7 +20,6 @@ class CollisionSystemAbstract
     public function new()
     {
         collBody = new Array<RigidBody>();
-        //detectionFunctors = new Dictionary(true);
         detectionFunctors = new Map();
         detectionFunctors.set("BOX_BOX", new CollDetectBoxBox());
         detectionFunctors.set("BOX_SPHERE", new CollDetectSphereBox());
@@ -49,32 +46,6 @@ class CollisionSystemAbstract
         detectionFunctors.set("TERRAIN_CAPSULE", new CollDetectCapsuleTerrain());
         detectionFunctors.set("TRIANGLEMESH_SPHERE", new CollDetectSphereMesh());
         detectionFunctors.set("TRIANGLEMESH_BOX", new CollDetectBoxMesh());
-
-        /*Reflect.setField(detectionFunctors, "BOX_BOX", new CollDetectBoxBox());
-        Reflect.setField(detectionFunctors, "BOX_SPHERE", new CollDetectSphereBox());
-        Reflect.setField(detectionFunctors, "BOX_CAPSULE", new CollDetectCapsuleBox());
-        Reflect.setField(detectionFunctors, "BOX_PLANE", new CollDetectBoxPlane());
-        Reflect.setField(detectionFunctors, "BOX_TERRAIN", new CollDetectBoxTerrain());
-        Reflect.setField(detectionFunctors, "BOX_TRIANGLEMESH", new CollDetectBoxMesh());
-        Reflect.setField(detectionFunctors, "SPHERE_BOX", new CollDetectSphereBox());
-        Reflect.setField(detectionFunctors, "SPHERE_SPHERE", new CollDetectSphereSphere());
-        Reflect.setField(detectionFunctors, "SPHERE_CAPSULE", new CollDetectSphereCapsule());
-        Reflect.setField(detectionFunctors, "SPHERE_PLANE", new CollDetectSpherePlane());
-        Reflect.setField(detectionFunctors, "SPHERE_TERRAIN", new CollDetectSphereTerrain());
-        Reflect.setField(detectionFunctors, "SPHERE_TRIANGLEMESH", new CollDetectSphereMesh());
-        Reflect.setField(detectionFunctors, "CAPSULE_CAPSULE", new CollDetectCapsuleCapsule());
-        Reflect.setField(detectionFunctors, "CAPSULE_BOX", new CollDetectCapsuleBox());
-        Reflect.setField(detectionFunctors, "CAPSULE_SPHERE", new CollDetectSphereCapsule());
-        Reflect.setField(detectionFunctors, "CAPSULE_PLANE", new CollDetectCapsulePlane());
-        Reflect.setField(detectionFunctors, "CAPSULE_TERRAIN", new CollDetectCapsuleTerrain());
-        Reflect.setField(detectionFunctors, "PLANE_BOX", new CollDetectBoxPlane());
-        Reflect.setField(detectionFunctors, "PLANE_SPHERE", new CollDetectSpherePlane());
-        Reflect.setField(detectionFunctors, "PLANE_CAPSULE", new CollDetectCapsulePlane());
-        Reflect.setField(detectionFunctors, "TERRAIN_SPHERE", new CollDetectSphereTerrain());
-        Reflect.setField(detectionFunctors, "TERRAIN_BOX", new CollDetectBoxTerrain());
-        Reflect.setField(detectionFunctors, "TERRAIN_CAPSULE", new CollDetectCapsuleTerrain());
-        Reflect.setField(detectionFunctors, "TRIANGLEMESH_SPHERE", new CollDetectSphereMesh());
-        Reflect.setField(detectionFunctors, "TRIANGLEMESH_BOX", new CollDetectBoxMesh());*/
     }
     
     public function addCollisionBody(body : RigidBody) : Void

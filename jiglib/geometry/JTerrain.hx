@@ -19,7 +19,7 @@ class JTerrain extends RigidBody
     
     public function new(tr : ITerrain, yUp : Bool = true)
     {
-        super();
+        super(null);
         
         // yUp for lite
         _yUp = yUp;
