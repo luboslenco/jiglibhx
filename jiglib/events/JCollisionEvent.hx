@@ -1,10 +1,16 @@
 package jiglib.events;
 
+#if JIGLIB_FLASH_EVENTS
+import flash.events.Event;
+#end
 
-//import flash.events.Event;
 import jiglib.physics.RigidBody;
 
-class JCollisionEvent //extends Event
+#if JIGLIB_FLASH_EVENTS
+class JCollisionEvent extends Event
+#else
+class JCollisionEvent
+#end
 {
     //called when the body occur a new collision
     public static inline var COLLISION_START : String = "collisionStart";
@@ -17,7 +23,9 @@ class JCollisionEvent //extends Event
     
     public function new(type : String)
     {
-        //super(type);
+        #if JIGLIB_FLASH_EVENTS
+        super(type);
+        #end
     }
 }
 

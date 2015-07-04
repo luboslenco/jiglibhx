@@ -1,7 +1,8 @@
 package jiglib.physics;
 
-
-//import flash.events.EventDispatcher;
+#if JIGLIB_FLASH_EVENTS
+import flash.events.EventDispatcher;
+#end
 
 import jiglib.cof.JConfig;
 import jiglib.collision.CollisionInfo;
@@ -15,7 +16,11 @@ import jiglib.events.JCollisionEvent;
 import jiglib.physics.constraint.JConstraint;
 import jiglib.plugin.ISkin3D;
 
-class RigidBody //extends EventDispatcher
+#if JIGLIB_FLASH_EVENTS
+class RigidBody extends EventDispatcher
+#else
+class RigidBody
+#end
 {
     public var rotationX(get, set) : Float;
     public var rotationY(get, set) : Float;
@@ -45,6 +50,8 @@ class RigidBody //extends EventDispatcher
     public var material(get, never) : MaterialProperties;
     public var restitution(get, set) : Float;
     public var friction(get, set) : Float;
+    public var onCollisionStart(get, set) : JCollisionEvent->Void;
+    public var onCollisionEnd(get, set) : JCollisionEvent->Void;
 
     private static var idCounter : Int = 0;
     
@@ -105,6 +112,10 @@ class RigidBody //extends EventDispatcher
     private var _gravityAxis : Int;
     // Calculate only when gravity is dirty or mass is dirty.
     private var _gravityForce : Vector3D;
+
+    // Additions in Haxe version for event dispatching fallback
+    private var _onCollisionStart:JCollisionEvent->Void;
+    private var _onCollisionEnd:JCollisionEvent->Void;
     
     public var collisions : Array<CollisionInfo>;  //store all collision info of this body  
     public var externalData : CollisionSystemGridEntry;  // used when collision system is grid  
@@ -112,7 +123,10 @@ class RigidBody //extends EventDispatcher
     
     public function new(skin : ISkin3D)
     {
-        //super();
+        #if JIGLIB_FLASH_EVENTS
+        super();
+        #end
+
         _useDegrees = ((JConfig.rotationType == "DEGREES")) ? true : false;
         
         _id = idCounter++;
@@ -158,6 +172,9 @@ class RigidBody //extends EventDispatcher
         _boundingBox = new JAABox();
         
         externalData = null;
+
+        _onCollisionStart = null;
+        _onCollisionEnd = null;
     }
     
     private function radiansToDegrees(rad : Float) : Float
@@ -852,7 +869,11 @@ class RigidBody //extends EventDispatcher
             
             var event : JCollisionEvent = new JCollisionEvent(JCollisionEvent.COLLISION_START);
             event.body = body;
-            //this.dispatchEvent(event);
+            #if JIGLIB_FLASH_EVENTS
+            this.dispatchEvent(event);
+            #end
+            if (_onCollisionStart != null)
+                _onCollisionStart(event);
         }
     }
     
@@ -865,7 +886,11 @@ class RigidBody //extends EventDispatcher
             
             var event : JCollisionEvent = new JCollisionEvent(JCollisionEvent.COLLISION_END);
             event.body = body;
-            //this.dispatchEvent(event);
+            #if JIGLIB_FLASH_EVENTS
+            this.dispatchEvent(event);
+            #end
+            if (_onCollisionEnd != null)
+                _onCollisionEnd(event);
         }
     }
     
@@ -1105,5 +1130,23 @@ class RigidBody //extends EventDispatcher
     {
         _material.friction = JMath3D.getLimiteNumber(friction, 0, 1);
         return friction;
+    }
+
+    private function get_onCollisionStart() : JCollisionEvent->Void
+    {
+        return _onCollisionStart;
+    }
+    private function set_onCollisionStart(v:JCollisionEvent->Void) : JCollisionEvent->Void
+    {
+        return _onCollisionStart = v;
+    }
+
+    private function get_onCollisionEnd() : JCollisionEvent->Void
+    {
+        return _onCollisionEnd;
+    }
+    private function set_onCollisionEnd(v:JCollisionEvent->Void) : JCollisionEvent->Void
+    {
+        return _onCollisionEnd = v;
     }
 }
