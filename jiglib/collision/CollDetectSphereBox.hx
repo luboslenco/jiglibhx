@@ -2,7 +2,6 @@ package jiglib.collision;
 
 import jiglib.collision.CollPointInfo;
 import jiglib.collision.CollisionInfo;
-//import jiglib.collision.JSphere;
 
 import jiglib.cof.JConfig;
 import jiglib.geometry.*;
@@ -40,12 +39,10 @@ class CollDetectSphereBox extends CollDetectFunctor
         if (!sphere.boundingBox.overlapTest(box.boundingBox)) 
         {
             return;
-        }  //var boxPos:Vector3D = box.oldState.position;    //var spherePos:Vector3D = sphere.oldState.position;  
+        }
         
-        
-        
-        
-        
+        //var boxPos:Vector3D = box.oldState.position;
+        //var spherePos:Vector3D = sphere.oldState.position;  
         
         var oldBoxPoint : Array<Vector3D> = [new Vector3D()];
         var newBoxPoint : Array<Vector3D> = [new Vector3D()];
@@ -65,7 +62,7 @@ class CollDetectSphereBox extends CollDetectFunctor
         if (Math.max(oldDepth, newDepth) > -JConfig.collToll) 
         {
             var dir : Vector3D;
-            var collPts : Array<CollPointInfo> = new Array<CollPointInfo>();
+            var collPts : Array<CollPointInfo> = [null];
             if (oldDist < -tiny) 
             {
                 dir = _oldBoxPosition.subtract(sphere.oldState.position).subtract(_oldBoxPosition);

@@ -4,10 +4,7 @@ class JNumber3D
 {
     public static function toArray(v : Vector3D) : Array<Float>
     {
-        var arr : Array<Float> = new Array<Float>();
-        arr[0] = v.x;
-        arr[1] = v.y;
-        arr[2] = v.z;
+        var arr : Array<Float> = [v.x, v.y, v.z];
         return arr;
     }
     
@@ -46,9 +43,5 @@ class JNumber3D
         N.normalize();
         
         return N;
-    }
-
-    public function new()
-    {
     }
 }

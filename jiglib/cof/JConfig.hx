@@ -17,8 +17,4 @@ class JConfig
     public static var numCollisionIterations : Int = 1;  // number of collision iterations  
     public static var numContactIterations : Int = 2;  // number of contact iteratrions  
     public static var numConstraintIterations : Int = 2;  // number of Constraint iteratrions  
-
-    public function new()
-    {
-    }
 }

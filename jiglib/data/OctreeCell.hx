@@ -24,7 +24,7 @@ class OctreeCell
     
     public function new(aabox : JAABox)
     {
-        childCellIndices = new Array<Int>();
+        childCellIndices = [for (i in 0...NUM_CHILDREN) -1];
         triangleIndices = new Array<Int>();
         
         clear();

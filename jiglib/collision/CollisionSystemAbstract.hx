@@ -11,7 +11,7 @@ class CollisionSystemAbstract
 {
     public var numCollisionsChecks(get, never) : Int;
 
-    public var detectionFunctors : Map<String, Dynamic>;
+    public var detectionFunctors : Map<String, CollDetectFunctor>;
     public var collBody : Array<RigidBody>;
     public var _numCollisionsChecks : Int = 0;
     
@@ -50,14 +50,15 @@ class CollisionSystemAbstract
     
     public function addCollisionBody(body : RigidBody) : Void
     {
-        if (Lambda.indexOf(collBody, body) < 0) 
+        if (collBody.indexOf(body) < 0) 
             collBody.push(body);
     }
     
     public function removeCollisionBody(body : RigidBody) : Void
     {
-        if (Lambda.indexOf(collBody, body) >= 0) 
-            collBody.splice(Lambda.indexOf(collBody, body), 1);
+        var idx = collBody.indexOf(body);
+        if (idx >= 0) 
+            collBody.splice(idx, 1);
     }
     
     public function removeAllCollisionBodies() : Void

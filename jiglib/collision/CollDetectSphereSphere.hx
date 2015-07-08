@@ -51,7 +51,7 @@ class CollDetectSphereSphere extends CollDetectFunctor
             
             var worldPos : Vector3D = sphere1.oldState.position.add(JNumber3D.getScaleVector(oldDelta, sphere1.radius - 0.5 * depth));
             
-            var collPts : Array<CollPointInfo> = new Array<CollPointInfo>();
+            var collPts : Array<CollPointInfo> = [null];
             var cpInfo : CollPointInfo = new CollPointInfo();
             cpInfo.r0 = worldPos.subtract(sphere0.oldState.position);
             cpInfo.r1 = worldPos.subtract(sphere1.oldState.position);

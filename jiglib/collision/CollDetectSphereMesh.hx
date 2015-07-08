@@ -51,14 +51,12 @@ class CollDetectSphereMesh extends CollDetectFunctor
         for (iTriangle in 0...numTriangles){
             meshTriangle = mesh.octree.getTriangle(potentialTriangles[iTriangle]);
             distToCentre = meshTriangle.plane.pointPlaneDistance(sphere.currentState.position);
-            if (distToCentre <= 0)                 {continue;
-            };
-            if (distToCentre >= sphereTolR)                 {continue;
-            };
+            if (distToCentre <= 0) continue;
+            if (distToCentre >= sphereTolR) continue;
             
             vertexIndices = meshTriangle.vertexIndices;
             triangle = new JTriangle(mesh.octree.getVertex(vertexIndices[0]), mesh.octree.getVertex(vertexIndices[1]), mesh.octree.getVertex(vertexIndices[2]));
-            arr = new Array<Float>();
+            arr = [0, 0];
             newD2 = triangle.pointTriangleDistanceSq(arr, sphere.currentState.position);
             
             if (newD2 < sphereTolR2) {

@@ -2,7 +2,6 @@ package jiglib.collision;
 
 import jiglib.collision.CollPointInfo;
 import jiglib.collision.CollisionInfo;
-//import jiglib.collision.JPlane;
 
 import jiglib.cof.JConfig;
 import jiglib.geometry.*;
@@ -47,7 +46,7 @@ class CollDetectSpherePlane extends CollDetectFunctor
             return;
         }
         
-        var collPts : Array<CollPointInfo> = new Array<CollPointInfo>();
+        var collPts : Array<CollPointInfo> = [null];
         var cpInfo : CollPointInfo;
         depth = sphere.radius - oldDist;
         

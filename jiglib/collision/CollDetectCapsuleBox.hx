@@ -4,7 +4,6 @@ import jiglib.collision.CollDetectFunctor;
 import jiglib.collision.CollDetectInfo;
 import jiglib.collision.CollPointInfo;
 import jiglib.collision.CollisionInfo;
-//import jiglib.collision.JCapsule;
 
 import jiglib.cof.JConfig;
 import jiglib.geometry.*;
@@ -52,9 +51,9 @@ class CollDetectCapsuleBox extends CollDetectFunctor
         var newSeg : JSegment = new JSegment(capsule.getBottomPos(capsule.currentState), JNumber3D.getScaleVector(capsule.currentState.getOrientationCols()[1], capsule.length));
         var radius : Float = capsule.radius;
         
-        var oldObj : Array<Float> = new Array<Float>();
+        var oldObj : Array<Float> = [0, 0, 0, 0];
         var oldDistSq : Float = oldSeg.segmentBoxDistanceSq(oldObj, box, box.oldState);
-        var newObj : Array<Float> = new Array<Float>();
+        var newObj : Array<Float> = [0, 0, 0, 0];
         var newDistSq : Float = newSeg.segmentBoxDistanceSq(newObj, box, box.currentState);
         var arr : Array<Vector3D> = box.oldState.getOrientationCols();
         

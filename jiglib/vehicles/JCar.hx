@@ -11,7 +11,7 @@ import jiglib.plugin.ISkin3D;
 class JCar
 {
     public var chassis(get, never) : JChassis;
-    public var wheels(get, never) : Array<Dynamic>;
+    public var wheels(get, never) : Map<String, JWheel>;
 
     
     private var _maxSteerAngle : Float;
@@ -26,14 +26,14 @@ class JCar
     private var _HBrake : Float;
     
     private var _chassis : JChassis;
-    private var _wheels : Array<Dynamic>;
-    private var _steerWheels : Array<Dynamic>;
+    private var _wheels : Map<String, JWheel>;
+    private var _steerWheels : Map<String, JWheel>;
     
     public function new(skin : ISkin3D)
     {
         _chassis = new JChassis(this, skin);
-        _wheels = [];
-        _steerWheels = [];
+        _wheels = new Map<String, JWheel>();
+        _steerWheels = new Map<String, JWheel>();
         _destSteering = _destAccelerate = _steering = _accelerate = _HBrake = 0;
         setCar();
     }
@@ -84,12 +84,12 @@ class JCar
                 damping, wheelNumRays);
     }
     
-    private function get_Chassis() : JChassis
+    private function get_chassis() : JChassis
     {
         return _chassis;
     }
     
-    private function get_Wheels() : Array<Dynamic>
+    private function get_wheels() : Map<String, JWheel>
     {
         return _wheels;
     }
@@ -99,29 +99,22 @@ class JCar
         _destAccelerate = val;
     }
     
-    public function setSteer(wheels : Array<Dynamic>, val : Float) : Void
+    public function setSteer(wheels : Array<String>, val : Float) : Void
     {
         _destSteering = val;
-        _steerWheels = [];
-        for (i in Reflect.fields(wheels))
+        _steerWheels = new Map<String, JWheel>();
+        for (wheelname in wheels)
         {
-            if (findWheel(wheels[i])) 
+            if (findWheel(wheelname)) 
             {
-                _steerWheels[wheels[i]] = _wheels[wheels[i]];
+                _steerWheels[wheelname] = _wheels[wheelname];
             }
         }
     }
     
     private function findWheel(_name : String) : Bool
     {
-        for (i in Reflect.fields(_wheels))
-        {
-            if (i == _name) 
-            {
-                return true;
-            }
-        }
-        return false;
+		return _wheels.exists(_name);
     }
     
     public function setHBrake(val : Float) : Void

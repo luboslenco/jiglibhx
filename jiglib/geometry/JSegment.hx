@@ -426,7 +426,7 @@ class JSegment
         out[1] = 0;
         out[2] = 0;
         
-        var obj : Array<Float> = new Array<Float>();
+        var obj : Array<Float> = [0, 0, 0, 0];
         var kRay : JRay = new JRay(origin, delta);
         var fSqrDistance : Float = sqrDistanceLine(obj, kRay, rkBox, boxState);
         if (obj[3] >= 0) 
@@ -477,7 +477,7 @@ class JSegment
         var kPntArr : Array<Float> = JNumber3D.toArray(kPnt);
         var kDirArr : Array<Float> = JNumber3D.toArray(kDir);
         
-        var bReflect : Array<Bool> = new Array<Bool>();
+        var bReflect : Array<Bool> = [false, false, false];
         for (i in 0...3){
             if (kDirArr[i] < 0) 
             {

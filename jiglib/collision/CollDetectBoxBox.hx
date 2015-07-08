@@ -178,8 +178,8 @@ class CollDetectBoxBox extends CollDetectFunctor
     {
         var num : Float = 0;
         var seg : JSegment;
-        var box0State : PhysicsState = ((newState)) ? box0.currentState : box0.oldState;
-        var box1State : PhysicsState = ((newState)) ? box1.currentState : box1.oldState;
+        var box0State : PhysicsState = (newState) ? box0.currentState : box0.oldState;
+        var box1State : PhysicsState = (newState) ? box1.currentState : box1.oldState;
         var boxPts : Array<Vector3D> = box1.getCornerPointsInBoxSpace(box1State, box0State);
         
         var boxEdges : Array<EdgeData> = box1.edges;
@@ -244,12 +244,11 @@ class CollDetectBoxBox extends CollDetectFunctor
         // record of the depths along each axis
         var ax : Vector3D;
         for (i in 0...axesLength){
-            overlapDepths[i] = new SpanData();
+            overlapDepths.push( new SpanData() );
             
             l2 = axes[i].lengthSquared;
             if (l2 < numTiny) 
-                {continue;
-            };
+                continue;
             
             ax = axes[i].clone();
             ax.normalize();
@@ -258,10 +257,9 @@ class CollDetectBoxBox extends CollDetectFunctor
                 info.body1.removeCollideBodies(info.body0);
                 return;
             }
-        }  // The box overlap, find the separation depth closest to 0.  
+        }
         
-        
-        
+        // The box overlap, find the separation depth closest to 0.  
         var minDepth : Float = numHuge;
         var minAxis : Int = -1;
         axesLength = axes.length;
@@ -269,10 +267,9 @@ class CollDetectBoxBox extends CollDetectFunctor
             l2 = axes[i].lengthSquared;
             if (l2 < numTiny) 
                 {continue;
-            }  // If this axis is the minimum, select it  ;
+            }
             
-            
-            
+            // If this axis is the minimum, select it
             if (overlapDepths[i].depth < minDepth) 
             {
                 minDepth = overlapDepths[i].depth;
@@ -284,10 +281,9 @@ class CollDetectBoxBox extends CollDetectFunctor
             info.body0.removeCollideBodies(info.body1);
             info.body1.removeCollideBodies(info.body0);
             return;
-        }  // Make sure the axis is facing towards the box0. if not, invert it  
+        }
         
-        
-        
+        // Make sure the axis is facing towards the box0. if not, invert it  
         var N : Vector3D = axes[minAxis].clone();
         if (box1.currentState.position.subtract(box0.currentState.position).dotProduct(N) > 0) 
             N.negate();
@@ -314,6 +310,9 @@ class CollDetectBoxBox extends CollDetectFunctor
         var SATPoint : Vector3D = new Vector3D();
         switch (minAxis)
         {
+            //-----------------------------------------------------------------
+            // Box0 face, Box1 Corner collision
+            //-----------------------------------------------------------------
             case 0, 1, 2:
             {
                 //-----------------------------------------------------------------
@@ -321,6 +320,9 @@ class CollDetectBoxBox extends CollDetectFunctor
                 //-----------------------------------------------------------------
                 SATPoint = getSupportPoint(box1, JNumber3D.getScaleVector(N, -1));
             }
+            //-----------------------------------------------------------------
+            // We have a Box2 corner/Box1 face collision
+            //-----------------------------------------------------------------
             case 3, 4, 5:
             {
                 //-----------------------------------------------------------------
@@ -328,13 +330,15 @@ class CollDetectBoxBox extends CollDetectFunctor
                 //-----------------------------------------------------------------
                 SATPoint = getSupportPoint(box0, N);
             }
+            //-----------------------------------------------------------------
+            // We have an edge/edge colliiosn
+            //-----------------------------------------------------------------
             case 6, 7, 8, 9, 10, 11, 12, 13, 14:
             {
                 //-----------------------------------------------------------------
                 // Retrieve which edges collided.
                 //-----------------------------------------------------------------
                 i = minAxis - 6;
-                //var ia : Int = i / 3;
                 var ia : Int = Std.int(i / 3);
                 var ib : Int = i - ia * 3;
                 //-----------------------------------------------------------------
@@ -377,7 +381,7 @@ class CollDetectBoxBox extends CollDetectFunctor
         var collPts : Array<CollPointInfo>;
         if (contactPoints.length > 0) 
         {
-            collPts = new Array<CollPointInfo>();
+            collPts = [for (i in 0...contactPoints.length) null];
             
             var minDist : Float = numHuge;
             var maxDist : Float = -numHuge;
@@ -422,7 +426,7 @@ class CollDetectBoxBox extends CollDetectFunctor
                 }
                 
                 cpInfo.initialPenetration = depth;
-                collPts[Std.int(i++)] = cpInfo;
+                collPts[i++] = cpInfo;
             }
         }
         else 
@@ -433,7 +437,7 @@ class CollDetectBoxBox extends CollDetectFunctor
             cpInfo.initialPenetration = oldDepth;
             
             collPts = new Array<CollPointInfo>();
-            collPts[0] = cpInfo;
+            collPts.push( cpInfo );
         }
         
         var collInfo : CollisionInfo = new CollisionInfo();

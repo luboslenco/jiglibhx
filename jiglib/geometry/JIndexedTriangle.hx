@@ -21,10 +21,7 @@ class JIndexedTriangle
     public function new()
     {
         counter = 0;
-        _vertexIndices = new Array<Int>();
-        _vertexIndices[0] = -1;
-        _vertexIndices[1] = -1;
-        _vertexIndices[2] = -1;
+        _vertexIndices = [-1, -1, -1];
         _plane = new PlaneData();
         _boundingBox = new JAABox();
     }

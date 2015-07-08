@@ -43,7 +43,7 @@ class CollDetectSphereTerrain extends CollDetectFunctor
             
             var Pt : Vector3D = sphere.oldState.position.subtract(JNumber3D.getScaleVector(obj.normal, sphere.radius));
             
-            var collPts : Array<CollPointInfo> = new Array<CollPointInfo>();
+            var collPts : Array<CollPointInfo> = [null];
             var cpInfo : CollPointInfo = new CollPointInfo();
             cpInfo.r0 = Pt.subtract(sphere.oldState.position);
             cpInfo.r1 = Pt.subtract(terrain.oldState.position);

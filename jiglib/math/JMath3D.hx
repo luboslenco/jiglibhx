@@ -50,8 +50,4 @@ class JMath3D
         }
         return n;
     }
-
-    public function new()
-    {
-    }
 }

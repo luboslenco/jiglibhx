@@ -10,10 +10,10 @@ import jiglib.physics.RigidBody;
 class JWheel
 {
     
-    private inline var noslipVel : Float = 0.2;
-    private inline var slipVel : Float = 0.4;
-    private inline var slipFactor : Float = 0.7;
-    private inline var smallVel : Float = 3;
+    private static inline var noslipVel : Float = 0.2;
+    private static inline var slipVel : Float = 0.4;
+    private static inline var slipFactor : Float = 0.7;
+    private static inline var smallVel : Float = 3;
     
     private var _car : JCar;
     private var _pos : Vector3D;
@@ -191,10 +191,10 @@ class JWheel
             _collisionSystem = PhysicsSystem.getInstance().getCollisionSystem();
         
         var maxNumRays : Int = 10;
-        var numRays : Int = Math.min(_numRays, maxNumRays);
+        var numRays : Int = (_numRays < maxNumRays) ? _numRays : maxNumRays;
         
-        var objArr : Array<CollOutBodyData> = new Array<CollOutBodyData>();
-        var segments : Array<JSegment> = new Array<JSegment>();
+        var objArr : Array<CollOutBodyData> = [for (i in 0...numRays) null];
+        var segments : Array<JSegment> = [for (i in 0...numRays) null];
         
         var deltaFwd : Float = (2 * _radius) / (numRays + 1);
         var deltaFwdStart : Float = deltaFwd;

@@ -4,8 +4,6 @@ import jiglib.collision.CollDetectFunctor;
 import jiglib.collision.CollDetectInfo;
 import jiglib.collision.CollPointInfo;
 import jiglib.collision.CollisionInfo;
-//import jiglib.collision.JCapsule;
-//import jiglib.collision.JPlane;
 
 import jiglib.cof.JConfig;
 import jiglib.geometry.*;

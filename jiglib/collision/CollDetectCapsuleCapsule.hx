@@ -4,7 +4,6 @@ import jiglib.collision.CollDetectFunctor;
 import jiglib.collision.CollDetectInfo;
 import jiglib.collision.CollPointInfo;
 import jiglib.collision.CollisionInfo;
-//import jiglib.collision.JCapsule;
 
 import jiglib.cof.JConfig;
 import jiglib.geometry.*;
@@ -51,9 +50,9 @@ class CollDetectCapsuleCapsule extends CollDetectFunctor
         
         var radSum : Float = capsule0.radius + capsule1.radius;
         
-        var oldObj : Array<Float> = new Array<Float>();
+        var oldObj : Array<Float> = [0, 0];
         var oldDistSq : Float = oldSeg0.segmentSegmentDistanceSq(oldObj, oldSeg1);
-        var newObj : Array<Float> = new Array<Float>();
+        var newObj : Array<Float> = [0, 0];
         var newDistSq : Float = newSeg0.segmentSegmentDistanceSq(oldObj, newSeg1);
         
         if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JConfig.collToll, 2)) 
@@ -81,7 +80,7 @@ class CollDetectCapsuleCapsule extends CollDetectFunctor
             cpInfo.r0 = worldPos.subtract(capsule0.oldState.position);
             cpInfo.r1 = worldPos.subtract(capsule1.oldState.position);
             cpInfo.initialPenetration = depth;
-            collPts[0] = cpInfo;
+            collPts.push( cpInfo );
         }
         
         if (collPts.length > 0) 

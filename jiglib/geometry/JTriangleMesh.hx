@@ -49,9 +49,8 @@ class JTriangleMesh extends RigidBody
         var transform : Matrix3D = JMatrix3D.getTranslationMatrix(currentState.position.x, currentState.position.y, currentState.position.z);
         transform = JMatrix3D.getAppendMatrix3D(currentState.orientation, transform);
         
-        var i : Int = 0;
         for (_point in vertices){
-            vts[i++] = transform.transformVector(_point);
+            vts.push( transform.transformVector(_point) );
         }
         
         _octree = new JOctree();
@@ -107,9 +106,8 @@ class JTriangleMesh extends RigidBody
         var transform : Matrix3D = JMatrix3D.getTranslationMatrix(currentState.position.x, currentState.position.y, currentState.position.z);
         transform = JMatrix3D.getAppendMatrix3D(currentState.orientation, transform);
         
-        var i : Int = 0;
         for (_point in _skinVertices){
-            vts[i++] = transform.transformVector(_point);
+            vts.push( transform.transformVector(_point) );
         }
         
         _octree.updateTriangles(vts);

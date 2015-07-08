@@ -86,9 +86,9 @@ class JMatrix3D
         var rawData : Array<Float> = matrix3D.rawData;
         var cols : Array<Vector3D> = new Array<Vector3D>();
         
-        cols[0] = new Vector3D(rawData[0], rawData[1], rawData[2]);
-        cols[1] = new Vector3D(rawData[4], rawData[5], rawData[6]);
-        cols[2] = new Vector3D(rawData[8], rawData[9], rawData[10]);
+        cols.push( new Vector3D(rawData[0], rawData[1], rawData[2]) );
+        cols.push( new Vector3D(rawData[4], rawData[5], rawData[6]) );
+        cols.push( new Vector3D(rawData[8], rawData[9], rawData[10]) );
         
         return cols;
     }
@@ -96,9 +96,5 @@ class JMatrix3D
     public static function multiplyVector(matrix3D : Matrix3D, v : Vector3D) : Void
     {
         v = matrix3D.transformVector(v);
-    }
-
-    public function new()
-    {
     }
 }

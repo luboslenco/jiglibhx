@@ -71,10 +71,10 @@ class PhysicsSystem
     
     private var _doingIntegration : Bool;
     
-    private var preProcessCollisionFn : Dynamic; // FUNCTION
-    private var preProcessContactFn : Dynamic;
-    private var processCollisionFn : Dynamic;
-    private var processContactFn : Dynamic;
+    private var preProcessCollisionFn : CollisionInfo->Float->Void; // FUNCTION
+    private var preProcessContactFn : CollisionInfo->Float->Void;
+    private var processCollisionFn : CollisionInfo->Float->Bool;
+    private var processContactFn : CollisionInfo->Float->Bool;
     
     private var _cachedContacts : Array<ContactData>;
     private var _collisionSystem : CollisionSystemAbstract;
@@ -83,7 +83,7 @@ class PhysicsSystem
     {
         if (_currentPhysicsSystem == null) 
         {
-            trace("version: JigLibHx (2014-11-18)");
+            trace("version: JigLibHx (2015-07-07)");
             _currentPhysicsSystem = new PhysicsSystem();
         }
         return _currentPhysicsSystem;
@@ -131,12 +131,11 @@ class PhysicsSystem
             _gravityAxis = 1;
         
         if (Math.abs(_gravity.z) > Math.abs(JNumber3D.toArray(_gravity)[_gravityAxis])) 
-            _gravityAxis = 2;  // do update only when dirty, faster than call every time in step
+            _gravityAxis = 2;
         
-        
-        
+        // do update only when dirty, faster than call every time in step
         for (body in _bodies)
-        body.updateGravity(_gravity, _gravityAxis);
+			body.updateGravity(_gravity, _gravityAxis);
     }
     
     // global gravity acceleration
@@ -171,7 +170,7 @@ class PhysicsSystem
     // Add a rigid body to the simulation
     public function addBody(body : RigidBody) : Void
     {
-        if (Lambda.indexOf(_bodies, body) < 0) 
+        if (_bodies.indexOf(body) < 0) 
         {
             _bodies.push(body);
             _collisionSystem.addCollisionBody(body);
@@ -184,9 +183,9 @@ class PhysicsSystem
     //remove a rigid body from the simulation
     public function removeBody(body : RigidBody) : Void
     {
-        if (Lambda.indexOf(_bodies, body) >= 0) 
+        if (_bodies.indexOf(body) >= 0) 
         {
-            _bodies.splice(Lambda.indexOf(_bodies, body), 1);
+            _bodies.splice(_bodies.indexOf(body), 1);
             _collisionSystem.removeCollisionBody(body);
         }
     }
@@ -203,7 +202,7 @@ class PhysicsSystem
     // this just used in constraint system
     public function addConstraint(constraint : JConstraint) : Void
     {
-        if (Lambda.indexOf(_constraints, constraint) < 0) 
+        if (_constraints.indexOf(constraint) < 0) 
             _constraints.push(constraint);
     }
     
@@ -211,8 +210,8 @@ class PhysicsSystem
     //this just used in constraint system
     public function removeConstraint(constraint : JConstraint) : Void
     {
-        if (Lambda.indexOf(_constraints, constraint) >= 0) 
-            _constraints.splice(Lambda.indexOf(_constraints, constraint), 1);
+        if (_constraints.indexOf(constraint) >= 0) 
+            _constraints.splice(_constraints.indexOf(constraint), 1);
     }
     
     //remove all constraints from the simulation
@@ -228,7 +227,7 @@ class PhysicsSystem
     //this just used in PhysicsController
     public function addController(controller : PhysicsController) : Void
     {
-        if (Lambda.indexOf(_controllers, controller) < 0) 
+        if (_controllers.indexOf(controller) < 0) 
             _controllers.push(controller);
     }
     
@@ -236,8 +235,8 @@ class PhysicsSystem
     //this just used in PhysicsController
     public function removeController(controller : PhysicsController) : Void
     {
-        if (Lambda.indexOf(_controllers, controller) >= 0) 
-            _controllers.splice(Lambda.indexOf(_controllers, controller), 1);
+        if (_controllers.indexOf(controller) >= 0) 
+            _controllers.splice(_controllers.indexOf(controller), 1);
     }
     
     //remove all controllers from the simulation
@@ -614,10 +613,10 @@ class PhysicsSystem
             impulse = JNumber3D.getScaleVector(N, normalImpulse);
             
             body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
-            if (body1 != null)                 body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+            if (body1 != null) body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
             
             VR = Vr0.clone();
-            if (body1 != null)                 VR = VR.subtract(Vr1);
+            if (body1 != null) VR = VR.subtract(Vr1);
             tangent_vel = VR.subtract(JNumber3D.getScaleVector(N, VR.dotProduct(N)));
             tangent_speed = tangent_vel.length;
             
@@ -653,7 +652,7 @@ class PhysicsSystem
                     }
                     T.scaleBy(frictionImpulse);
                     body0.applyBodyWorldImpulse(T, ptInfo.r0, false);
-                    if (body1 != null)                         body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(T, -1), ptInfo.r1, false);
+                    if (body1 != null) body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(T, -1), ptInfo.r1, false);
                 }
             }
         }
@@ -661,7 +660,7 @@ class PhysicsSystem
         if (gotOne) 
         {
             body0.setConstraintsAndCollisionsUnsatisfied();
-            if (body1 != null)                 body1.setConstraintsAndCollisionsUnsatisfied();
+            if (body1 != null) body1.setConstraintsAndCollisionsUnsatisfied();
         }
         
         return gotOne;
@@ -727,7 +726,7 @@ class PhysicsSystem
                 
                 impulse = JNumber3D.getScaleVector(N, actualImpulse);
                 body0.applyBodyWorldImpulse(impulse, ptInfo.r0, false);
-                if (body1 != null)                     body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+                if (body1 != null) body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
                 
                 gotOne = true;
             }
@@ -755,7 +754,7 @@ class PhysicsSystem
                 
                 impulse = JNumber3D.getScaleVector(N, actualImpulse);
                 body0.applyBodyWorldImpulseAux(impulse, ptInfo.r0, false);
-                if (body1 != null)                     body1.applyBodyWorldImpulseAux(JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
+                if (body1 != null) body1.applyBodyWorldImpulseAux(JNumber3D.getScaleVector(impulse, -1), ptInfo.r1, false);
                 
                 gotOne = true;
             }
@@ -807,7 +806,7 @@ class PhysicsSystem
                         actualFrictionImpulse = ptInfo.accumulatedFrictionImpulse.subtract(origAccumulatedFrictionImpulse);
                         
                         body0.applyBodyWorldImpulse(actualFrictionImpulse, ptInfo.r0, false);
-                        if (body1 != null)                             body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(actualFrictionImpulse, -1), ptInfo.r1, false);
+                        if (body1 != null) body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(actualFrictionImpulse, -1), ptInfo.r1, false);
                     }
                 }
             }
@@ -816,7 +815,7 @@ class PhysicsSystem
         if (gotOne) 
         {
             body0.setConstraintsAndCollisionsUnsatisfied();
-            if (body1 != null)                 body1.setConstraintsAndCollisionsUnsatisfied();
+            if (body1 != null) body1.setConstraintsAndCollisionsUnsatisfied();
         }
         
         return gotOne;
@@ -846,7 +845,7 @@ class PhysicsSystem
         var orig : Float;
         var actualImpulse : Vector3D;
         
-        for (ptInfo/* AS3HX WARNING could not determine type for var: ptInfo exp: EField(EIdent(collision),pointInfo) type: null */ in collision.pointInfo){
+        for (ptInfo in collision.pointInfo){
             normalVel = 0;
             if (body0 != null) {
                 normalVel = body0.getVelocity(ptInfo.r0).dotProduct(N) + body0.getVelocityAux(ptInfo.r0).dotProduct(N);
@@ -864,42 +863,39 @@ class PhysicsSystem
             ptInfo.accumulatedNormalImpulseAux = Math.max(ptInfo.accumulatedNormalImpulseAux + impulse, 0);
             actualImpulse = JNumber3D.getScaleVector(N, ptInfo.accumulatedNormalImpulseAux - orig);
             
-            if (body0 != null)                 body0.applyBodyWorldImpulse(actualImpulse, ptInfo.r0, false);
-            if (body1 != null)                 body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(actualImpulse, -1), ptInfo.r1, false);
+            if (body0 != null) body0.applyBodyWorldImpulse(actualImpulse, ptInfo.r0, false);
+            if (body1 != null) body1.applyBodyWorldImpulse(JNumber3D.getScaleVector(actualImpulse, -1), ptInfo.r1, false);
         }
         
-        if (body0 != null)             body0.setConstraintsAndCollisionsUnsatisfied();
-        if (body1 != null)             body1.setConstraintsAndCollisionsUnsatisfied();
+        if (body0 != null) body0.setConstraintsAndCollisionsUnsatisfied();
+        if (body1 != null) body1.setConstraintsAndCollisionsUnsatisfied();
         return true;
     }
     
     private function sortPositionX(body0 : RigidBody, body1 : RigidBody) : Int
     {
         if (body0.currentState.position.x < body1.currentState.position.x) 
-            return -1
+            return -1;
         else if (body0.currentState.position.x > body1.currentState.position.x) 
-            return 1
-        else 
+            return 1;
         return 0;
     }
     
     private function sortPositionY(body0 : RigidBody, body1 : RigidBody) : Int
     {
         if (body0.currentState.position.y < body1.currentState.position.y) 
-            return -1
+            return -1;
         else if (body0.currentState.position.y > body1.currentState.position.y) 
-            return 1
-        else 
+            return 1;
         return 0;
     }
     
     private function sortPositionZ(body0 : RigidBody, body1 : RigidBody) : Int
     {
         if (body0.currentState.position.z < body1.currentState.position.z) 
-            return -1
+            return -1;
         else if (body0.currentState.position.z > body1.currentState.position.z) 
-            return 1
-        else 
+            return 1;
         return 0;
     }
     
@@ -938,7 +934,7 @@ class PhysicsSystem
                 else 
                 {
                     setImmovable = false;
-                    for (info/* AS3HX WARNING could not determine type for var: info exp: EField(EIdent(body),collisions) type: null */ in body.collisions)
+                    for (info in body.collisions)
                     {
                         body0 = info.objInfo.body0;
                         body1 = info.objInfo.body1;
@@ -975,7 +971,6 @@ class PhysicsSystem
         var contact : ContactData;
         var collInfo_objInfo : CollDetectInfo;
         var collInfo_pointInfo : Array<CollPointInfo>;
-        var i : Int = 0;
         var id1 : Int;
         for (collInfo in _collisions)
         {
@@ -987,11 +982,8 @@ class PhysicsSystem
             //_cachedContacts.fixed = false;
             //_cachedContacts.length += collInfo_pointInfo.length;
             //_cachedContacts.fixed = true;
-            for (i in 0...collInfo_pointInfo.length) collInfo_pointInfo.push(null);
             
             for (ptInfo in collInfo_pointInfo) {
-                
-                if (ptInfo == null) return; // TODO: ptInfo null and crashes
 
                 id1 = -1;
                 if (body1 != null) id1 = body1.id;
@@ -1004,7 +996,6 @@ class PhysicsSystem
                 }
 
                 contact = new ContactData();
-                //_cachedContacts[i++] = contact;
                 _cachedContacts.push(contact);
                 contact.pair = new BodyPair(body0, body1, ptInfo.r0, ptInfo.r1);
                 contact.impulse = new CachedImpulse(ptInfo.accumulatedNormalImpulse, ptInfo.accumulatedNormalImpulseAux, ptInfo.accumulatedFrictionImpulse);
@@ -1027,7 +1018,7 @@ class PhysicsSystem
         if (_constraints.length > 0) 
         {
             for (constraint in _constraints)
-            constraint.preApply(dt);
+                constraint.preApply(dt);
             
             for (step in 0...iteration){
                 gotOne = false;
@@ -1087,7 +1078,8 @@ class PhysicsSystem
             }
             else 
             {
-                for (i in origNumCollisions...len){preProcessCollisionFn(_collisions[i], dt);
+                for (i in origNumCollisions...len) {
+                    preProcessCollisionFn(_collisions[i], dt);
                 }
             }
             
@@ -1100,9 +1092,9 @@ class PhysicsSystem
     
     public function activateObject(body : RigidBody) : Void
     {
-        if (!body.movable || body.isActive)             return;
+        if (!body.movable || body.isActive) return;
         
-        if (Lambda.indexOf(_activeBodies, body) < 0) {
+        if (_activeBodies.indexOf(body) < 0) {
             body.setActive();
             //_activeBodies.fixed = false;
             _activeBodies.push(body);
@@ -1164,19 +1156,19 @@ class PhysicsSystem
     private function updateAllController(dt : Float) : Void
     {
         for (controller in _controllers)
-        controller.updateController(dt);
+            controller.updateController(dt);
     }
     
     private function updateAllVelocities(dt : Float) : Void
     {
         for (activeBody in _activeBodies)
-        activeBody.updateVelocity(dt);
+            activeBody.updateVelocity(dt);
     }
     
     private function notifyAllPostPhysics(dt : Float) : Void
     {
         for (activeBody in _activeBodies)
-        activeBody.postPhysics(dt);
+            activeBody.postPhysics(dt);
     }
     
     private function detectAllCollisions(dt : Float) : Void
@@ -1196,13 +1188,12 @@ class PhysicsSystem
         _collisionSystem.detectAllCollisions(_activeBodies, _collisions);
         
         for (activeBody in _activeBodies)
-        activeBody.restoreState();
+            activeBody.restoreState();
     }
     
     private function findAllActiveBodiesAndCopyStates() : Void
     {
         _activeBodies = new Array<RigidBody>();
-        //var i : Int = 0;
         
         for (body in _bodies)
         {
@@ -1214,14 +1205,7 @@ class PhysicsSystem
                 _activeBodies.push(body);
                 body.copyCurrentStateToOld();
             }
-        }  // correct length  
-        
-        //_activeBodies.fixed = false;
-        //_activeBodies.length = i;
-        //while (_activeBodies.length > i) _activeBodies.pop();
-        
-        // fixed is faster
-        //_activeBodies.fixed = true;
+        }
     }
     
     // Integrates the system forwards by dt - the caller is
@@ -1238,7 +1222,7 @@ class PhysicsSystem
         updateAllVelocities(dt);
         handleAllConstraints(dt, JConfig.numContactIterations, true);
         
-        if (JConfig.doShockStep)             doShockStep(dt);
+        if (JConfig.doShockStep) doShockStep(dt);
         
         tryToActivateAllFrozenObjects();
         tryToFreezeAllObjects(dt);

@@ -14,7 +14,7 @@ class BodyPair
     {
         
         var id1 : Int = -1;
-        if (_body1 != null)             id1 = _body1.id;
+        if (_body1 != null) id1 = _body1.id;
         
         if (_body0.id > id1) 
         {

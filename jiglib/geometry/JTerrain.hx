@@ -99,8 +99,6 @@ class JTerrain extends RigidBody
         w = limiteInt(Std.int(point.x), Std.int(_terrain.minW), Std.int(_terrain.maxW));
         h = limiteInt(Std.int(point.z), Std.int(_terrain.minH), Std.int(_terrain.maxH));
         
-        //i0 = as3hx.Compat.parseInt((w - _terrain.minW) / _terrain.dw);
-        //j0 = as3hx.Compat.parseInt((h - _terrain.minH) / _terrain.dh);
         i0 = Std.int((w - _terrain.minW) / _terrain.dw);
         j0 = Std.int((h - _terrain.minH) / _terrain.dh);
         i0 = limiteInt(i0, 0, _terrain.sw);

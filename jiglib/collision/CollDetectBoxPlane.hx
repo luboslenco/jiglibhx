@@ -4,7 +4,6 @@ import jiglib.collision.CollDetectFunctor;
 import jiglib.collision.CollDetectInfo;
 import jiglib.collision.CollPointInfo;
 import jiglib.collision.CollisionInfo;
-//import jiglib.collision.JPlane;
 
 import jiglib.cof.JConfig;
 import jiglib.geometry.*;
@@ -51,8 +50,8 @@ class CollDetectBoxPlane extends CollDetectFunctor
         var newPts_length : Int = newPts.length;
         
         for (i in 0...newPts_length){
-            newPt = newPts[Std.int(i)];
-            oldPt = oldPts[Std.int(i)];
+            newPt = newPts[i];
+            oldPt = oldPts[i];
             newDepth = -1 * plane.pointPlaneDistance(newPt);
             oldDepth = -1 * plane.pointPlaneDistance(oldPt);
             

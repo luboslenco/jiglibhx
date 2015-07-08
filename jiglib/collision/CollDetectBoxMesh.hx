@@ -90,7 +90,8 @@ class CollDetectBoxMesh extends CollDetectFunctor
             seg = new JSegment(boxPts[edge.ind0], boxPts[edge.ind1].subtract(boxPts[edge.ind0]));
             if (triangle.segmentTriangleIntersection(data, seg)) {
                 addPoint(pts, seg.getPoint(data.frac), combinationDistanceSq);
-                if (pts.length > 8)                     return pts.length;
+                if (pts.length > 8)
+                    return pts.length;
             }
         }
         
@@ -102,11 +103,11 @@ class CollDetectBoxMesh extends CollDetectFunctor
             data = new CollOutData();
             if (box.segmentIntersect(data, new JSegment(pt0, pt1.subtract(pt0)), box.currentState)) {
                 addPoint(pts, data.position, combinationDistanceSq);
-                if (pts.length > 8)                     return pts.length;
+                if (pts.length > 8) return pts.length;
             }
             if (box.segmentIntersect(data, new JSegment(pt1, pt0.subtract(pt1)), box.currentState)) {
                 addPoint(pts, data.position, combinationDistanceSq);
-                if (pts.length > 8)                     return pts.length;
+                if (pts.length > 8) return pts.length;
             }
         }
         return pts.length;
@@ -146,7 +147,7 @@ class CollDetectBoxMesh extends CollDetectFunctor
                 dirs0[2].crossProduct(triEdge1), 
                 dirs0[2].crossProduct(triEdge2)];
         
-        var overlapDepths : Array<SpanData> = new Array<SpanData>();
+        var overlapDepths : Array<SpanData> = [for (i in 0...numAxes) null];
         for (i in 0...numAxes){
             overlapDepths[i] = new SpanData();
             if (disjoint(overlapDepths[i], axes[i], box, tri)) {
@@ -180,7 +181,7 @@ class CollDetectBoxMesh extends CollDetectFunctor
             }
         }
         
-        if (minAxis == -1)             return false;
+        if (minAxis == -1) return false;
         
         D = box.currentState.position.subtract(tri.getCentre());
         N = axes[minAxis];
@@ -202,7 +203,7 @@ class CollDetectBoxMesh extends CollDetectFunctor
         oldDepth = depth + delta.dotProduct(N);
         
         var numPts : Int = pts.length;
-        var collPts : Array<CollPointInfo> = new Array<CollPointInfo>();
+        var collPts : Array<CollPointInfo> = [for (i in 0...numPts) null];
         if (numPts > 0) {
             var cpInfo : CollPointInfo;
             for (i in 0...numPts){

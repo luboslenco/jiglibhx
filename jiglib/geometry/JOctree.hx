@@ -126,7 +126,7 @@ class JOctree
         
         var numTriangles : Int = _triangles.length;
         for (i in 0...numTriangles){
-            _cells[0].triangleIndices[i] = i;
+            _cells[0].triangleIndices.push(i);
         }
         
         var cellsToProcess : Array<Int> = new Array<Int>();
@@ -142,11 +142,8 @@ class JOctree
                 continue;
             }
             for (i in 0...OctreeCell.NUM_CHILDREN){
-                //_cells[cellIndex].childCellIndices[i] = as3hx.Compat.parseInt(_cells.length);
-                //cellsToProcess.push(as3hx.Compat.parseInt(_cells.length));
-                _cells[cellIndex].childCellIndices[i] = Std.int(_cells.length);
-                cellsToProcess.push(Std.int(_cells.length));
-
+                _cells[cellIndex].childCellIndices[i] = _cells.length;
+                cellsToProcess.push(_cells.length);
                 _cells.push(new OctreeCell(createAABox(_cells[cellIndex].AABox, i)));
                 
                 childCell = _cells[_cells.length - 1];
@@ -178,7 +175,7 @@ class JOctree
 		 won't allocate more memory.
 		 Returns the number of triangles (same as triangles.size())*/
     public function getTrianglesIntersectingtAABox(triangles : Array<Int>, aabb : JAABox) : Int{
-        if (_cells.length == 0)             return 0;
+        if (_cells.length == 0) return 0;
         
         //_cellsToTest.length = 0;
         _cellsToTest.splice(0, _cellsToTest.length);

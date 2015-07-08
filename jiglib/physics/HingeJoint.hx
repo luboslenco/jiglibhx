@@ -56,8 +56,8 @@ class HingeJoint extends PhysicsController
         var allowedDistanceSide : Float = sidewaysSlack * hingeHalfWidth;
         
         sidePointConstraints = new Array<JConstraintMaxDistance>();
-        sidePointConstraints[0] = new JConstraintMaxDistance(_body0, relPos0a, _body1, relPos1a, allowedDistanceSide);
-        sidePointConstraints[1] = new JConstraintMaxDistance(_body0, relPos0b, _body1, relPos1b, allowedDistanceSide);
+        sidePointConstraints.push( new JConstraintMaxDistance(_body0, relPos0a, _body1, relPos1a, allowedDistanceSide) );
+        sidePointConstraints.push( new JConstraintMaxDistance(_body0, relPos0b, _body1, relPos1b, allowedDistanceSide) );
         
         midPointConstraint = new JConstraintPoint(_body0, _hingePosRel0, _body1, _hingePosRel1, allowedDistanceMid, timescale);
         

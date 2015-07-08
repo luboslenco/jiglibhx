@@ -2,7 +2,6 @@ package jiglib.collision;
 
 import jiglib.collision.CollPointInfo;
 import jiglib.collision.CollisionInfo;
-//import jiglib.collision.JSphere;
 
 import jiglib.cof.JConfig;
 import jiglib.geometry.*;
@@ -47,9 +46,9 @@ class CollDetectSphereCapsule extends CollDetectFunctor
         var newSeg : JSegment = new JSegment(capsule.getBottomPos(capsule.currentState), JNumber3D.getScaleVector(capsule.currentState.getOrientationCols()[1], capsule.length));
         var radSum : Float = sphere.radius + capsule.radius;
         
-        var oldObj : Array<Float> = new Array<Float>();
+        var oldObj : Array<Float> = [0];
         var oldDistSq : Float = oldSeg.pointSegmentDistanceSq(oldObj, sphere.oldState.position);
-        var newObj : Array<Float> = new Array<Float>();
+        var newObj : Array<Float> = [0];
         var newDistSq : Float = newSeg.pointSegmentDistanceSq(newObj, sphere.currentState.position);
         
         if (Math.min(oldDistSq, newDistSq) < Math.pow(radSum + JConfig.collToll, 2)) 
@@ -71,7 +70,7 @@ class CollDetectSphereCapsule extends CollDetectFunctor
             
             var worldPos : Vector3D = segPos.add(JNumber3D.getScaleVector(delta, capsule.radius - 0.5 * depth));
             
-            var collPts : Array<CollPointInfo> = new Array<CollPointInfo>();
+            var collPts : Array<CollPointInfo> = [null];
             var cpInfo : CollPointInfo = new CollPointInfo();
             cpInfo.r0 = worldPos.subtract(sphere.oldState.position);
             cpInfo.r1 = worldPos.subtract(capsule.oldState.position);

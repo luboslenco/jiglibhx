@@ -44,14 +44,14 @@ class JAABox
         center = this.centrePos;
         halfSide = JNumber3D.getScaleVector(this.sideLengths, 0.5);
         points = new Array<Vector3D>();
-        points[0] = center.add(new Vector3D(halfSide.x, -halfSide.y, halfSide.z));
-        points[1] = center.add(new Vector3D(halfSide.x, halfSide.y, halfSide.z));
-        points[2] = center.add(new Vector3D(-halfSide.x, -halfSide.y, halfSide.z));
-        points[3] = center.add(new Vector3D(-halfSide.x, halfSide.y, halfSide.z));
-        points[4] = center.add(new Vector3D(-halfSide.x, -halfSide.y, -halfSide.z));
-        points[5] = center.add(new Vector3D(-halfSide.x, halfSide.y, -halfSide.z));
-        points[6] = center.add(new Vector3D(halfSide.x, -halfSide.y, -halfSide.z));
-        points[7] = center.add(new Vector3D(halfSide.x, halfSide.y, -halfSide.z));
+        points.push( center.add(new Vector3D(halfSide.x, -halfSide.y, halfSide.z)) );
+        points.push( center.add(new Vector3D(halfSide.x, halfSide.y, halfSide.z)) );
+        points.push( center.add(new Vector3D(-halfSide.x, -halfSide.y, halfSide.z)) );
+        points.push( center.add(new Vector3D(-halfSide.x, halfSide.y, halfSide.z)) );
+        points.push( center.add(new Vector3D(-halfSide.x, -halfSide.y, -halfSide.z)) );
+        points.push( center.add(new Vector3D(-halfSide.x, halfSide.y, -halfSide.z)) );
+        points.push( center.add(new Vector3D(halfSide.x, -halfSide.y, -halfSide.z)) );
+        points.push( center.add(new Vector3D(halfSide.x, halfSide.y, -halfSide.z)) );
         
         return points;
     }

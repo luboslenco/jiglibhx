@@ -44,14 +44,14 @@ class JBox extends RigidBody
     {
         var halfSide : Vector3D = getHalfSideLengths();
         _points = new Array<Vector3D>();
-        _points[0] = new Vector3D(halfSide.x, -halfSide.y, halfSide.z);
-        _points[1] = new Vector3D(halfSide.x, halfSide.y, halfSide.z);
-        _points[2] = new Vector3D(-halfSide.x, -halfSide.y, halfSide.z);
-        _points[3] = new Vector3D(-halfSide.x, halfSide.y, halfSide.z);
-        _points[4] = new Vector3D(-halfSide.x, -halfSide.y, -halfSide.z);
-        _points[5] = new Vector3D(-halfSide.x, halfSide.y, -halfSide.z);
-        _points[6] = new Vector3D(halfSide.x, -halfSide.y, -halfSide.z);
-        _points[7] = new Vector3D(halfSide.x, halfSide.y, -halfSide.z);
+        _points.push( new Vector3D(halfSide.x, -halfSide.y, halfSide.z) );
+        _points.push( new Vector3D(halfSide.x, halfSide.y, halfSide.z) );
+        _points.push( new Vector3D(-halfSide.x, -halfSide.y, halfSide.z) );
+        _points.push( new Vector3D(-halfSide.x, halfSide.y, halfSide.z) );
+        _points.push( new Vector3D(-halfSide.x, -halfSide.y, -halfSide.z) );
+        _points.push( new Vector3D(-halfSide.x, halfSide.y, -halfSide.z) );
+        _points.push( new Vector3D(halfSide.x, -halfSide.y, -halfSide.z) );
+        _points.push( new Vector3D(halfSide.x, halfSide.y, -halfSide.z) );
     }
     
     private function set_sideLengths(size : Vector3D) : Vector3D
@@ -116,15 +116,13 @@ class JBox extends RigidBody
     // Gets the corner points in world space
     public function getCornerPoints(state : PhysicsState) : Array<Vector3D>
     {
-        var _points_length : Int = _points.length;
         var arr : Array<Vector3D> = new Array<Vector3D>();
         
         var transform : Matrix3D = JMatrix3D.getTranslationMatrix(state.position.x, state.position.y, state.position.z);
         transform = JMatrix3D.getAppendMatrix3D(state.orientation, transform);
         
-        var i : Int = 0;
         for (_point in _points){
-            arr[i++] = transform.transformVector(_point);
+            arr.push( transform.transformVector(_point) );
         }
         
         return arr;
@@ -148,9 +146,8 @@ class JBox extends RigidBody
         transform = JMatrix3D.getTranslationMatrix(pos.x, pos.y, pos.z);
         transform = JMatrix3D.getAppendMatrix3D(orient, transform);
         
-        var i : Int = 0;
         for (_point in _points)
-        arr[i++] = transform.transformVector(_point);
+            arr.push( transform.transformVector(_point) );
         
         return arr;
     }
@@ -315,9 +312,9 @@ class JBox extends RigidBody
             frac = max;
         }
         if (frac < 0) 
-            frac = 0  /*if (frac > 1)
-				frac = 1;*/  ;
-        
+            frac = 0;
+        /*if (frac > 1)
+            frac = 1;*/
         if (frac > 1 - tiny) 
         {
             return false;

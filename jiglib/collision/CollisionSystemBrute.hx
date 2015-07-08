@@ -26,7 +26,7 @@ class CollisionSystemBrute extends CollisionSystemAbstract
         _numCollisionsChecks = 0;
         for (_body in bodies)
         {
-            if (!_body.isActive)                 continue;
+            if (!_body.isActive) continue;
             
             bodyID = _body.id;
             bodyType = _body.type;

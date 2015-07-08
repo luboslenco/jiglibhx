@@ -71,11 +71,11 @@ class CollisionSystemGrid extends CollisionSystemAbstract
         
         gridEntries = new Array<CollisionSystemGridEntry>();
         
-        var len : Int = gridEntries.length;
+        var len : Int = nx*ny*nz;
         for (j in 0...len){
             var gridEntry : CollisionSystemGridEntry = new CollisionSystemGridEntry(null);
             gridEntry.gridIndex = j;
-            gridEntries[j] = gridEntry;
+            gridEntries.push(gridEntry);
         }
         
         overflowEntries = new CollisionSystemGridEntry(null);
@@ -146,22 +146,16 @@ class CollisionSystemGrid extends CollisionSystemAbstract
         j = Std.int(fj);
         k = Std.int(fk);
         
-        if (i < 0) {i = 0;fi = 0.0;
-        }
-        else if (i >= Std.int(nx)) {i = 0;fi = 0.0;
-        }
+        if (i < 0) { i = 0; fi = 0.0; }
+        else if (i >= nx) { i = 0; fi = 0.0; }
         else fi -= i;
         
-        if (j < 0) {j = 0;fj = 0.0;
-        }
-        else if (j >= Std.int(ny)) {j = 0;fj = 0.0;
-        }
+        if (j < 0) { j = 0; fj = 0.0; }
+        else if (j >= ny) { j = 0; fj = 0.0; }
         else fj -= j;
         
-        if (k < 0) {k = 0;fk = 0.0;
-        }
-        else if (k >= Std.int(nz)) {k = 0;fk = 0.0;
-        }
+        if (k < 0) { k = 0; fk = 0.0; }
+        else if (k >= nz) { k = 0; fk = 0.0; }
         else fk -= k;
         
         tempStoreObject.i = i;tempStoreObject.j = j;tempStoreObject.k = k;tempStoreObject.fi = fi;tempStoreObject.fj = fj;tempStoreObject.fk = fk;
@@ -175,13 +169,13 @@ class CollisionSystemGrid extends CollisionSystemAbstract
     {
         var tempStoreVector : Vector3D = calcGridForSkin3(colBody);
         
-        if (tempStoreVector.x == -1)             return -1;
+        if (tempStoreVector.x == -1) return -1;
         return calcIndex(Std.int(tempStoreVector.x), Std.int(tempStoreVector.y), Std.int(tempStoreVector.z));
     }
     
     override public function addCollisionBody(body : RigidBody) : Void
     {
-        if (Lambda.indexOf(collBody, body) < 0) 
+        if (collBody.indexOf(body) < 0) 
             collBody.push(body);
         
         body.collisionSystem = this;
@@ -205,8 +199,8 @@ class CollisionSystemGrid extends CollisionSystemAbstract
             body.externalData = null;
         }
         
-        if (Lambda.indexOf(collBody, body) >= 0) 
-            collBody.splice(Lambda.indexOf(collBody, body), 1);
+        if (collBody.indexOf(body) >= 0) 
+            collBody.splice(collBody.indexOf(body), 1);
     }
     
     override public function removeAllCollisionBodies() : Void
@@ -238,13 +232,12 @@ class CollisionSystemGrid extends CollisionSystemAbstract
         
         // see if it's moved grid
         if (gridIndex == entry.gridIndex) 
-            return;  //trace(gridIndex);
+            return;
         
-        
-        
+        //trace(gridIndex);
         var start : CollisionSystemGridEntry = null;
         //if (gridIndex >= 0**)
-        if (gridEntries.length - 1 > gridIndex && gridIndex >= 0)               // check if it's outside the gridspace, if so add to overflow  
+        if (gridEntries.length - 1 > gridIndex && gridIndex >= 0) // check if it's outside the gridspace, if so add to overflow  
             start = gridEntries[gridIndex]
         else 
             start = overflowEntries;
@@ -263,10 +256,9 @@ class CollisionSystemGrid extends CollisionSystemAbstract
         {
             //trace("Warning skin has grid entry null!");
             return null;
-        }  // todo - work back from the mGridIndex rather than calculating it again...  
+        }
         
-        
-        
+        // todo - work back from the mGridIndex rather than calculating it again...  
         var i : Int;
         var j : Int;
         var k : Int;
@@ -282,10 +274,9 @@ class CollisionSystemGrid extends CollisionSystemAbstract
             entries = gridEntries.concat([]);
             entries.push(overflowEntries);
             return entries;
-        }  // always add the overflow  
+        }
         
-        
-        
+        // always add the overflow  
         entries.push(overflowEntries);
         
         var delta : Vector3D = colBody.boundingBox.sideLengths;  // skin.WorldBoundingBox.Max - skin.WorldBoundingBox.Min;  
@@ -297,10 +288,9 @@ class CollisionSystemGrid extends CollisionSystemAbstract
         if (fj + (delta.y / dy) < 1) 
             maxJ = 0;
         if (fk + (delta.z / dz) < 1) 
-            maxK = 0;  // now add the contents of all grid boxes - their contents may extend beyond the bounds
+            maxK = 0;
         
-        
-        
+        // now add the contents of all grid boxes - their contents may extend beyond the bounds
         for (di in -1...maxI + 1){
             for (dj in -1...maxJ + 1){
                 for (dk in -1...maxK + 1){

@@ -18,7 +18,7 @@ class JChassis extends JBox
         _car = car;
     }
     
-    private function get_Car() : JCar
+    private function get_car() : JCar
     {
         return _car;
     }

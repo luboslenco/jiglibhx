@@ -799,7 +799,7 @@ class RigidBody
     // previously stored position, or the position passed in.
     public function addMovementActivation(pos : Vector3D, otherBody : RigidBody) : Void
     {
-        if (Lambda.indexOf(_bodiesToBeActivatedOnMovement, otherBody) > -1) 
+        if (_bodiesToBeActivatedOnMovement.indexOf(otherBody) > -1) 
             return;
         
         if (_bodiesToBeActivatedOnMovement.length == 0) 
@@ -849,21 +849,21 @@ class RigidBody
     //disable the collision between two bodies
     public function disableCollisions(body : RigidBody) : Void
     {
-        if (Lambda.indexOf(_nonCollidables, body) < 0) 
+        if (_nonCollidables.indexOf(body) < 0) 
             _nonCollidables.push(body);
     }
     
     //enable the collision between disabled bodies
     public function enableCollisions(body : RigidBody) : Void
     {
-        if (Lambda.indexOf(_nonCollidables, body) >= 0) 
-            _nonCollidables.splice(Lambda.indexOf(_nonCollidables, body), 1);
+        if (_nonCollidables.indexOf(body) >= 0) 
+            _nonCollidables.splice(_nonCollidables.indexOf(body), 1);
     }
     
     
     //do not call this function youself, this just used in collision system.
     public function addCollideBody(body : RigidBody) : Void{
-        if (Lambda.indexOf(_collideBodies, body) < 0) {
+        if (_collideBodies.indexOf(body) < 0) {
             
             _collideBodies.push(body);
             
@@ -879,7 +879,7 @@ class RigidBody
     
     //do not call this function youself, this just used in collision system.
     public function removeCollideBodies(body : RigidBody) : Void{
-        var i : Int = Lambda.indexOf(_collideBodies, body);
+        var i : Int = _collideBodies.indexOf(body);
         if (i >= 0) {
             
             _collideBodies.splice(i, 1);
@@ -898,7 +898,7 @@ class RigidBody
     //this just used in constraint system
     public function addConstraint(constraint : JConstraint) : Void
     {
-        if (Lambda.indexOf(_constraints, constraint) < 0) 
+        if (_constraints.indexOf(constraint) < 0) 
         {
             _constraints.push(constraint);
         }
@@ -908,9 +908,9 @@ class RigidBody
     //this just used in constraint system
     public function removeConstraint(constraint : JConstraint) : Void
     {
-        if (Lambda.indexOf(_constraints, constraint) >= 0) 
+        if (_constraints.indexOf(constraint) >= 0) 
         {
-            _constraints.splice(Lambda.indexOf(_constraints, constraint), 1);
+            _constraints.splice(_constraints.indexOf(constraint), 1);
         }
     }
     
