@@ -1,0 +1,21 @@
+-js main.js
+-main CarDrive
+-cp ../common
+-lib heaps
+-lib jiglibhx
+-D resourcesPath=../res
+-D source-map-content
+-dce full
+--macro include('h3d')
+--next
+-swf cardrive.swf
+-swf-header 800:600:60:000000
+--flash-strict
+-swf-version 11.8
+-main CarDrive
+-cp ../common
+-lib heaps
+-lib jiglibhx
+-D resourcesPath=../res
+-dce full
+--macro include('h3d')
