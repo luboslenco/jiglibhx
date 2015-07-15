@@ -1,0 +1,22 @@
+-js main.js
+-main CollisionEventTest
+-cp ../common
+-lib heaps
+-lib jiglibhx
+-D resourcesPath=../res
+-D source-map-content
+-dce full
+--macro include('h3d')
+--next
+-swf collisioneventtest.swf
+-swf-header 800:600:60:000000
+--flash-strict
+-swf-version 11.8
+-main CollisionEventTest
+-cp ../common
+-lib heaps
+-lib jiglibhx
+-D resourcesPath=../res
+#-D JIGLIB_FLASH_EVENTS  # enable this to use the Flash event dispatching mechanism
+-dce full
+--macro include('h3d')
